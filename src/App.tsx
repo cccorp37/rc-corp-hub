@@ -16,6 +16,10 @@ import SmsPage from "@/pages/SmsPage";
 import ServicesPage from "@/pages/ServicesPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AdminPage from "@/pages/AdminPage";
+import CheckoutPage from "@/pages/CheckoutPage";
+import FavoritesPage from "@/pages/FavoritesPage";
+import TransactionsPage from "@/pages/TransactionsPage";
+import ActivityPage from "@/pages/ActivityPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,6 +63,10 @@ const App = () => (
               <Route path="/sms" element={<SmsPage />} />
               <Route path="/services" element={<ServicesPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/transactions" element={<TransactionsPage />} />
+              <Route path="/activity" element={<ActivityPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
