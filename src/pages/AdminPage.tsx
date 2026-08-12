@@ -80,6 +80,49 @@ const AdminPage = () => {
     setCoachingSessions(coachingRes.data || []);
     setShopRequests(shopsRes.data || []);
     setProducts(productsRes.data || []);
+    fetchPaymentConfig();
+  };
+
+  const db = supabase as any;
+
+  const fetchPaymentConfig = async () => {
+    const [gwRes, settingsRes] = await Promise.all([
+      db.from("payment_gateways").select("*").order("name"),
+      db.from("payment_settings").select("*").maybeSingle(),
+    ]);
+    setGateways(gwRes.data || []);
+    setActiveGatewayId(settingsRes.data?.active_gateway_id ?? null);
+  };
+
+  const handleSelectGateway = async (id: string) => {
+    const { error } = await db.from("payment_settings").update({ active_gateway_id: id }).eq("singleton", true);
+    if (error) return toast.error("Impossible de définir la passerelle");
+    setActiveGatewayId(id);
+    toast.success("Passerelle de paiement activée");
+  };
+
+  const handleToggleGateway = async (id: string, enabled: boolean) => {
+    await db.from("payment_gateways").update({ is_enabled: enabled }).eq("id", id);
+    fetchPaymentConfig();
+  };
+
+  const handleAddGateway = async () => {
+    if (!gwName || !gwCode) return;
+    const { error } = await db.from("payment_gateways").insert({
+      name: gwName,
+      code: gwCode,
+      config: gwCheckoutUrl ? { checkout_url: gwCheckoutUrl } : {},
+    });
+    if (error) return toast.error("Erreur lors de l'ajout");
+    setGwName(""); setGwCode(""); setGwCheckoutUrl("");
+    toast.success("Passerelle ajoutée");
+    fetchPaymentConfig();
+  };
+
+  const handleDeleteGateway = async (id: string) => {
+    await db.from("payment_gateways").delete().eq("id", id);
+    toast.success("Passerelle supprimée");
+    fetchPaymentConfig();
   };
 
   const resetProductForm = () => {
