@@ -185,12 +185,59 @@ const AdminPage = () => {
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="w-full grid grid-cols-4">
+        <TabsList className="w-full grid grid-cols-5">
           <TabsTrigger value="dashboard"><BarChart3 className="h-4 w-4" /></TabsTrigger>
           <TabsTrigger value="products"><Package className="h-4 w-4" /></TabsTrigger>
+          <TabsTrigger value="payments"><CreditCard className="h-4 w-4" /></TabsTrigger>
           <TabsTrigger value="notifs"><Bell className="h-4 w-4" /></TabsTrigger>
           <TabsTrigger value="data"><Users className="h-4 w-4" /></TabsTrigger>
         </TabsList>
+
+        <TabsContent value="payments" className="mt-4 space-y-4">
+          <div className="bg-card border rounded-xl p-4 space-y-2">
+            <h3 className="font-semibold text-sm">Passerelle de paiement active</h3>
+            <p className="text-xs text-muted-foreground">
+              La passerelle sélectionnée est la seule utilisée lors des paiements. Elle reste invisible pour les utilisateurs.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            {gateways.map((g) => (
+              <div
+                key={g.id}
+                className={`bg-card border rounded-xl p-3 flex items-center justify-between gap-3 ${
+                  activeGatewayId === g.id ? "border-primary ring-1 ring-primary" : ""
+                }`}
+              >
+                <button className="flex-1 min-w-0 text-left" onClick={() => handleSelectGateway(g.id)}>
+                  <p className="font-medium text-sm truncate flex items-center gap-1.5">
+                    {g.name}
+                    {activeGatewayId === g.id && <Check className="h-3.5 w-3.5 text-primary" />}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {g.code} • {g.config?.checkout_url || "aucune URL configurée"}
+                  </p>
+                </button>
+                <Switch checked={g.is_enabled} onCheckedChange={(v) => handleToggleGateway(g.id, v)} />
+                <button onClick={() => handleDeleteGateway(g.id)} className="p-1.5 text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+            {gateways.length === 0 && (
+              <p className="text-xs text-muted-foreground text-center py-6">Aucune passerelle enregistrée</p>
+            )}
+          </div>
+
+          <div className="bg-card border rounded-xl p-4 space-y-3">
+            <h3 className="font-semibold text-sm flex items-center gap-1.5"><Plus className="h-4 w-4" /> Ajouter une passerelle</h3>
+            <Input placeholder="Nom (ex: Orange Money)" value={gwName} onChange={(e) => setGwName(e.target.value)} />
+            <Input placeholder="Code (ex: orange_money)" value={gwCode} onChange={(e) => setGwCode(e.target.value)} />
+            <Input placeholder="URL de checkout" value={gwCheckoutUrl} onChange={(e) => setGwCheckoutUrl(e.target.value)} />
+            <Button className="w-full" onClick={handleAddGateway} disabled={!gwName || !gwCode}>Ajouter</Button>
+          </div>
+        </TabsContent>
+
 
         <TabsContent value="dashboard" className="mt-4 space-y-3">
           <div className="grid grid-cols-2 gap-3">
