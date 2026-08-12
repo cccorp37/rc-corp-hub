@@ -33,19 +33,25 @@ const MarketplacePage = () => {
 
   const handleOrder = async (product: any) => {
     if (!user) return;
-    const { error } = await supabase.from("orders").insert({
+    const { data, error } = await supabase.from("orders").insert({
       user_id: user.id,
       product_id: product.id,
       amount: product.price,
       status: "pending",
-    });
+    }).select("id").single();
     if (error) {
       toast.error("Erreur lors de la commande");
-    } else {
-      toast.success("Commande passée avec succès !");
-      if (product.redirect_url) {
-        window.open(product.redirect_url, "_blank");
-      }
+      return;
+    }
+    toast.success("Commande enregistrée, redirection vers le paiement...");
+    const res = await initiatePayment({
+      amount: product.price,
+      reference: data?.id,
+      description: product.title,
+    });
+    if (!res.success) {
+      toast.error(res.error || "Paiement indisponible");
+      if (product.redirect_url) window.open(product.redirect_url, "_blank");
     }
   };
 
