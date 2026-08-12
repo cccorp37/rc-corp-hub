@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, ShoppingCart, Filter } from "lucide-react";
 import { toast } from "sonner";
+import { initiatePayment } from "@/lib/payments";
 
 const categories = ["Tous", "ebook", "billet", "ordinateur"];
 
