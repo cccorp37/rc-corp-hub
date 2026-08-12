@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, Package, Bell, Users, MessageSquare, Store, BookOpen, ArrowLeft, Trash2, Edit, Plus } from "lucide-react";
+import { BarChart3, Package, Bell, Users, MessageSquare, Store, BookOpen, ArrowLeft, Trash2, Edit, Plus, CreditCard, Check } from "lucide-react";
 
 const AdminPage = () => {
   const { user, isAdmin } = useAuth();
