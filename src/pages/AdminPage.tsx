@@ -42,6 +42,13 @@ const AdminPage = () => {
   const [smsCampaigns, setSmsCampaigns] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
 
+  // Passerelles de paiement (admin uniquement)
+  const [gateways, setGateways] = useState<any[]>([]);
+  const [activeGatewayId, setActiveGatewayId] = useState<string | null>(null);
+  const [gwName, setGwName] = useState("");
+  const [gwCode, setGwCode] = useState("");
+  const [gwCheckoutUrl, setGwCheckoutUrl] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
