@@ -1,0 +1,11 @@
+{
+  "name": "Neko Services Numériques",
+  "short_name": "Neko",
+  "description": "Paiements et services numériques pour l'Afrique",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7fbff",
+  "theme_color": "#0875c9",
+  "lang": "fr",
+  "icons": [{"src":"/neko-logo.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
